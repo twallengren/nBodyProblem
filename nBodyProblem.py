@@ -101,14 +101,6 @@ class nBodySystem:
             coord = body.getCoordinate()
             vel = body.getVelocity()
             newCoordinate = [coord[0] + vel[0]*self.deltaTime, coord[1] + vel[1]*self.deltaTime]
-            #if newCoordinate[0] < -10:
-             #   newCoordinate[0] = 10
-            #elif newCoordinate[0] > 10:
-             #   newCoordinate[0] = -10
-            #if newCoordinate[1] < -10:
-             #   newCoordinate[1] = 10
-            #elif newCoordinate[1] > 10:
-             #   newCoordinate[1] = -10
             body.setCoordinate(newCoordinate)
 
     def updateVelocities(self):
