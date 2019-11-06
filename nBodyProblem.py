@@ -27,12 +27,3 @@ class nBodyProblem:
         self.system.updateAccelerations()
         self.system.updateVelocities()
         self.system.updateCoordinates()
-
-################################################################################
-################################################################################
-# Define script behavior
-
-if __name__ == '__main__':
-
-    n = nBodyProblem(n=20)
-    n.animateMotion()
