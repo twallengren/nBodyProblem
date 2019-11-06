@@ -1,17 +1,14 @@
 import random
-import math
 import matplotlib.pyplot as plt
 from matplotlib import animation
+from massiveBody import massiveBody
+from nBodySystem import nBodySystem
 
 # units are:
 # mass - solar masses
 # distance - parsecs
 
 # frames update every 50ms and each frame represents 1000 years
-
-def getRandom(scale):
-
-    return [scale*random.random() - scale/2, scale*random.random() - scale/2]
 
 class nBodyProblem:
 
@@ -23,8 +20,8 @@ class nBodyProblem:
 
             self.system.addBody(massiveBody(
                 mass = 10000 if i == 0 else random.randint(1,10),
-                coordinate = [0, 0] if i == 0 else getRandom(2),
-                velocity = [0, 0] if i == 0 else getRandom(1e-5),
+                coordinate = [0, 0] if i == 0 else [random.uniform(-1,1),random.uniform(-1,1)],
+                velocity = [0, 0] if i == 0 else [random.uniform(-1e-5,1e-5),random.uniform(-1e-5,1e-5)],
                 ))
 
     def iterateMotion(self):
@@ -81,106 +78,6 @@ class nBodyProblem:
                                        interval=50, blit=False)
         
         plt.show()
-        
-
-class nBodySystem:
-
-    def __init__(self):
-
-        self.bodies = []
-        self.G = 4.915e-15
-        self.deltaTime = 1000
-
-    def addBody(self, massiveBody):
-
-        self.bodies.append(massiveBody)
-
-    def updateCoordinates(self):
-
-        for body in self.bodies:
-            coord = body.getCoordinate()
-            vel = body.getVelocity()
-            newCoordinate = [coord[0] + vel[0]*self.deltaTime, coord[1] + vel[1]*self.deltaTime]
-            body.setCoordinate(newCoordinate)
-
-    def updateVelocities(self):
-
-        for body in self.bodies:
-            vel = body.getVelocity()
-            acc = body.getAcceleration()
-            newVelocity = [vel[0] + acc[0]*self.deltaTime, vel[1] + acc[1]*self.deltaTime]
-            body.setVelocity(newVelocity)
-
-    def updateAccelerations(self):
-
-        for bodyOne in self.bodies:
-            netForce = [0, 0]
-            for bodyTwo in self.bodies:
-                if bodyOne != bodyTwo:
-                    coordOne = bodyOne.getCoordinate()
-                    massOne = bodyOne.getMass()
-                    coordTwo = bodyTwo.getCoordinate()
-                    massTwo = bodyTwo.getMass()
-                    forceDirection = [coordOne[0] - coordTwo[0], coordOne[1] - coordTwo[1]]
-                    directionMagnitude = math.sqrt(forceDirection[0]**2 + forceDirection[1]**2)
-                    forceMagnitude = self.G*massOne*massTwo/directionMagnitude**2
-                    force = [forceMagnitude*direction/directionMagnitude for direction in forceDirection]
-                    netForce = [netForce[0] + force[0], netForce[1] + force[1]]
-            newAcceleration = [-forceComp/bodyOne.getMass() for forceComp in netForce]
-            bodyOne.setAcceleration(newAcceleration)
-        
-class massiveBody:
-
-    def __init__(self,
-                 mass = 1,
-                 coordinate = (0, 0),
-                 velocity = (0, 0),
-                 acceleration = (0, 0)):
-
-        self.mass = mass
-        self.path = [[],[]]
-        self.setCoordinate(coordinate)
-        self.setVelocity(velocity)
-        self.setAcceleration(acceleration)
-
-    def getVelocity(self):
-
-        return self.velocity
-
-    def setVelocity(self, velocity):
-
-        self.velocity = velocity
-
-    def getCoordinate(self):
-
-        return self.coordinate
-
-    def setCoordinate(self, coordinate):
-
-        self.path[0].append(coordinate[0])
-        self.path[1].append(coordinate[1])
-        self.coordinate = coordinate
-
-    def getMass(self):
-
-        return self.mass
-
-    def getAcceleration(self):
-
-        return self.acceleration
-
-    def setAcceleration(self, acceleration):
-
-        self.acceleration = acceleration
-
-    def __eq__(self, other):
-
-        equalCoordinates = self.getCoordinate() == other.getCoordinate()
-        equalMasses = self.getMass() == other.getMass()
-        equalVelocities = self.getVelocity() == other.getVelocity()
-        equalAccelerations = self.getAcceleration() == other.getAcceleration()
-
-        return equalCoordinates & equalMasses & equalVelocities & equalAccelerations
 
 ################################################################################
 ################################################################################
