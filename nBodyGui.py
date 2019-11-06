@@ -48,12 +48,13 @@ class StartPage(tk.Frame):
 class SimulationPage(tk.Frame):
     def __init__(self, parent, controller):
         self.animate = False
+        self.controller = controller
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Large Central Mass System", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
         button1 = ttk.Button(self, text="Back to Home",
-                             command=lambda: controller.show_frame(StartPage))
+                             command=lambda: self.backToHome())
         button1.pack()
 
         button2 = ttk.Button(self, text="Start/Stop",
@@ -119,6 +120,10 @@ class SimulationPage(tk.Frame):
 
     def startStopButton(self):
         self.animate = ~self.animate
+
+    def backToHome(self):
+        self.animate = ~self.animate
+        self.controller.show_frame(StartPage)
 
 ################################################################################
 ################################################################################
