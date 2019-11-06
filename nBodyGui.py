@@ -122,7 +122,8 @@ class SimulationPage(tk.Frame):
         self.animate = ~self.animate
 
     def backToHome(self):
-        self.animate = ~self.animate
+        if self.animate:
+            self.animate = ~self.animate
         self.controller.show_frame(StartPage)
 
 ################################################################################
