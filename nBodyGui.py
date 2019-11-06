@@ -59,6 +59,7 @@ class PageOne(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Two Body System", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
+        currentFrame = 1
 
         button1 = ttk.Button(self, text="Back to Home",
                              command=lambda: controller.show_frame(StartPage))
@@ -94,6 +95,7 @@ class PageTwo(tk.Frame):
 
 class PageThree(tk.Frame):
     def __init__(self, parent, controller):
+        self.animate = False
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Large Central Mass System", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
@@ -101,6 +103,10 @@ class PageThree(tk.Frame):
         button1 = ttk.Button(self, text="Back to Home",
                              command=lambda: controller.show_frame(StartPage))
         button1.pack()
+
+        button2 = ttk.Button(self, text="Start/Stop",
+                             command=lambda: self.startStopButton())
+        button2.pack()
 
         n = nBodyProblem(n=20)
 
@@ -136,7 +142,8 @@ class PageThree(tk.Frame):
             return tuple(bodylist)
 
         def animatePath(i):
-            n.iterateMotion()
+            if self.animate:
+                n.iterateMotion()
             for index, path in enumerate(pathlist):
                 path.set_data(n.system.bodies[index].path[0],
                               n.system.bodies[index].path[1])
@@ -157,6 +164,9 @@ class PageThree(tk.Frame):
                                            interval=50, blit=False)
 
         canvas.draw()
+
+    def startStopButton(self):
+        self.animate = ~self.animate
 
 ################################################################################
 ################################################################################
