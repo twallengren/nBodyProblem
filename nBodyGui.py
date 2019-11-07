@@ -61,45 +61,49 @@ class SimulationPage(tk.Frame):
                              command=lambda: self.startStopButton())
         button2.pack()
 
-        n = nBodyProblem(n=20)
+        button3 = ttk.Button(self, text="Reset",
+                             command=lambda: self.setNBody(21))
+        button3.pack()
+
+        self.n = nBodyProblem(n=21)
 
         fig = plt.figure()
         ax = plt.axes(xlim=[-2, 2], ylim=[-2, 2])
 
         bodylist = []
-        for index, body in enumerate(n.system.bodies):
+        for index, body in enumerate(self.n.system.bodies):
             bodylist.append(ax.plot([], [], 'ko' if index == 0 else 'ro')[0])
 
         pathlist = []
-        for index in range(len(n.system.bodies)):
+        for index in range(len(self.n.system.bodies)):
             pathlist.append(ax.plot([], [], lw=1)[0])
 
         # initialization function: plot the background of each frame
         def initBody():
             for index, body in enumerate(bodylist):
-                bodyCoords = n.system.bodies[index].getCoordinate()
+                bodyCoords = self.n.system.bodies[index].getCoordinate()
                 body.set_data(bodyCoords[0], bodyCoords[1])
             return bodylist
 
         def initPath():
             for index, path in enumerate(pathlist):
-                currentPath = n.system.bodies[index].path
+                currentPath = self.n.system.bodies[index].path
                 path.set_data(currentPath[0], currentPath[1])
             return pathlist
 
         # animation function.  This is called sequentially
         def animateBody(i):
             for index, body in enumerate(bodylist):
-                bodyCoords = n.system.bodies[index].getCoordinate()
+                bodyCoords = self.n.system.bodies[index].getCoordinate()
                 body.set_data(bodyCoords[0], bodyCoords[1])
             return tuple(bodylist)
 
         def animatePath(i):
             if self.animate:
-                n.iterateMotion()
+                self.n.iterateMotion()
             for index, path in enumerate(pathlist):
-                path.set_data(n.system.bodies[index].path[0],
-                              n.system.bodies[index].path[1])
+                path.set_data(self.n.system.bodies[index].path[0],
+                              self.n.system.bodies[index].path[1])
             return tuple(pathlist)
 
         canvas = FigureCanvasTkAgg(fig, self)
@@ -125,6 +129,9 @@ class SimulationPage(tk.Frame):
         if self.animate:
             self.animate = ~self.animate
         self.controller.show_frame(StartPage)
+
+    def setNBody(self,N):
+        self.n = nBodyProblem(n=N)
 
 ################################################################################
 ################################################################################
