@@ -17,9 +17,9 @@ class nBodyProblem:
         for i in range(0,n):
 
             self.system.addBody(massiveBody(
-                mass = 10000 if i == 0 else random.randint(1,10),
-                coordinate = [0, 0] if i == 0 else [random.uniform(-1,1),random.uniform(-1,1)],
-                velocity = [0, 0] if i == 0 else [random.uniform(-1e-5,1e-5),random.uniform(-1e-5,1e-5)],
+                mass = 1000000 if i == 0 or i == 1 else random.randint(1,100),
+                coordinate = [0, 0] if i == 0 else [random.uniform(-5,5),random.uniform(-5,5)],
+                velocity = [0, 0] if i == 0 else [random.uniform(-5e-5,5e-5),random.uniform(-5e-5,5e-5)],
                 ))
 
     def iterateMotion(self):

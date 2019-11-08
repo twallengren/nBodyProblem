@@ -62,17 +62,17 @@ class SimulationPage(tk.Frame):
         button2.pack()
 
         button3 = ttk.Button(self, text="Reset",
-                             command=lambda: self.setNBody(21))
+                             command=lambda: self.setNBody(22))
         button3.pack()
 
-        self.n = nBodyProblem(n=21)
+        self.n = nBodyProblem(n=22)
 
         fig = plt.figure()
-        ax = plt.axes(xlim=[-2, 2], ylim=[-2, 2])
+        ax = plt.axes(xlim=[-20, 20], ylim=[-20, 20])
 
         bodylist = []
         for index, body in enumerate(self.n.system.bodies):
-            bodylist.append(ax.plot([], [], 'ko' if index == 0 else 'ro')[0])
+            bodylist.append(ax.plot([], [], 'ko' if index == 0 or index == 1 else 'ro')[0])
 
         pathlist = []
         for index in range(len(self.n.system.bodies)):
