@@ -129,11 +129,11 @@ class SimulationPage(tk.Frame):
 
     def setNBody(self, **kwargs):
         if len(kwargs) != 0:
-            plt.cla()
+            plt.clf()
             self.canvas.get_tk_widget().destroy()
+            self.canvas._tkcanvas.destroy()
         self.fig = plt.figure(1)
         self.canvas = FigureCanvasTkAgg(self.fig, self)
-        self.fig = plt.figure(1)
         self.canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
         self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         if len(kwargs) == 0:
