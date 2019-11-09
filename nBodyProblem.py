@@ -10,16 +10,30 @@ from nBodySystem import nBodySystem
 
 class nBodyProblem:
 
-    def __init__(self, n = 3):
+    def __init__(self, n):
 
         self.system = nBodySystem()
+
+        # add first black hole
+        self.system.addBody(massiveBody(
+            mass=1000000,
+            coordinate=[2, 0],
+            velocity=[0, -3e-5]
+        ))
+
+        # add second black hole
+        self.system.addBody(massiveBody(
+            mass=1000000,
+            coordinate=[-2, 0],
+            velocity=[0, 3e-5]
+        ))
 
         for i in range(0,n):
 
             self.system.addBody(massiveBody(
-                mass = 1000000 if i == 0 or i == 1 else random.randint(1,100),
-                coordinate = [0, 0] if i == 0 else [random.uniform(-5,5),random.uniform(-5,5)],
-                velocity = [0, 0] if i == 0 else [random.uniform(-5e-5,5e-5),random.uniform(-5e-5,5e-5)],
+                mass = random.randint(10,100),
+                coordinate = [random.uniform(-10,10),random.uniform(-10,10)],
+                velocity = [random.uniform(-5e-5,5e-5),random.uniform(-5e-5,5e-5)],
                 ))
 
     def iterateMotion(self):

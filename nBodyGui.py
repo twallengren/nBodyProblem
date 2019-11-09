@@ -53,19 +53,19 @@ class SimulationPage(tk.Frame):
         label = tk.Label(self, text="Large Central Mass System", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = ttk.Button(self, text="Back to Home",
+        homeButton = ttk.Button(self, text="Back to Home",
                              command=lambda: self.backToHome())
-        button1.pack()
+        homeButton.pack()
 
-        button2 = ttk.Button(self, text="Start/Stop",
+        toggleButton = ttk.Button(self, text="Start/Stop",
                              command=lambda: self.startStopButton())
-        button2.pack()
+        toggleButton.pack()
 
-        button3 = ttk.Button(self, text="Reset",
-                             command=lambda: self.setNBody(22))
-        button3.pack()
+        resetButton = ttk.Button(self, text="Reset",
+                             command=lambda: self.setNBody(20))
+        resetButton.pack()
 
-        self.n = nBodyProblem(n=22)
+        self.n = nBodyProblem(n=20)
 
         fig = plt.figure()
         ax = plt.axes(xlim=[-20, 20], ylim=[-20, 20])
