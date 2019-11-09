@@ -5,6 +5,7 @@ from nBodySystem import nBodySystem
 # units are:
 # mass - solar masses
 # distance - parsecs
+# time - years
 
 # frames update every 50ms and each frame represents 1000 years
 
