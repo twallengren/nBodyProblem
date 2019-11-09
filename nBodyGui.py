@@ -41,16 +41,16 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Home Page", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button3 = ttk.Button(self, text="Large Central Mass System",
+        simulationPageButton = ttk.Button(self, text="Simulation Page",
                              command=lambda: controller.show_frame(SimulationPage))
-        button3.pack()
+        simulationPageButton.pack()
 
 class SimulationPage(tk.Frame):
     def __init__(self, parent, controller):
         self.animate = False
         self.controller = controller
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Large Central Mass System", font=LARGE_FONT)
+        label = tk.Label(self, text="Simulation Page", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
         homeButton = ttk.Button(self, text="Back to Home",
@@ -61,66 +61,63 @@ class SimulationPage(tk.Frame):
                              command=lambda: self.startStopButton())
         toggleButton.pack()
 
+        numOfBodiesLabel = tk.Label(self, text="Number of 10-100 Solar Mass Bodies (min 1, max 20)", font=LARGE_FONT)
+        numOfBodiesLabel.pack(pady=10, padx=10)
+        self.numOfBodies = 1
+        numBodies = tk.IntVar()
+        self.numberOfBodiesScale = tk.Scale(self,
+                                            from_=1,
+                                            to=20,
+                                            variable=numBodies,
+                                            orient=tk.HORIZONTAL,
+                                            command=self.changeNumOfBodies)
+        self.numberOfBodiesScale.pack()
+
         resetButton = ttk.Button(self, text="Reset",
-                             command=lambda: self.setNBody(20))
+                             command=lambda: self.setNBody(reset=True))
         resetButton.pack()
+        self.setNBody()
 
-        self.n = nBodyProblem(n=20)
-
-        fig = plt.figure()
-        ax = plt.axes(xlim=[-20, 20], ylim=[-20, 20])
-
-        bodylist = []
-        for index, body in enumerate(self.n.system.bodies):
-            bodylist.append(ax.plot([], [], 'ko' if index == 0 or index == 1 else 'ro')[0])
-
-        pathlist = []
-        for index in range(len(self.n.system.bodies)):
-            pathlist.append(ax.plot([], [], lw=1)[0])
+    def animateCanvas(self):
 
         # initialization function: plot the background of each frame
         def initBody():
-            for index, body in enumerate(bodylist):
+            for index, body in enumerate(self.bodylist):
                 bodyCoords = self.n.system.bodies[index].getCoordinate()
                 body.set_data(bodyCoords[0], bodyCoords[1])
-            return bodylist
+            return self.bodylist
 
         def initPath():
-            for index, path in enumerate(pathlist):
+            for index, path in enumerate(self.pathlist):
                 currentPath = self.n.system.bodies[index].path
                 path.set_data(currentPath[0], currentPath[1])
-            return pathlist
+            return self.pathlist
 
         # animation function.  This is called sequentially
         def animateBody(i):
-            for index, body in enumerate(bodylist):
+            for index, body in enumerate(self.bodylist):
                 bodyCoords = self.n.system.bodies[index].getCoordinate()
                 body.set_data(bodyCoords[0], bodyCoords[1])
-            return tuple(bodylist)
+            return tuple(self.bodylist)
 
         def animatePath(i):
             if self.animate:
                 self.n.iterateMotion()
-            for index, path in enumerate(pathlist):
+            for index, path in enumerate(self.pathlist):
                 path.set_data(self.n.system.bodies[index].path[0],
                               self.n.system.bodies[index].path[1])
-            return tuple(pathlist)
-
-        canvas = FigureCanvasTkAgg(fig, self)
-        canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
-
-        toolbar = NavigationToolbar2Tk(canvas, self)
-        toolbar.update()
-        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+            return tuple(self.pathlist)
 
         # call the animator.  blit=True means only re-draw the parts that have changed.
-        animPath = animation.FuncAnimation(fig, animatePath, init_func=initPath, frames=1000,
+        animPath = animation.FuncAnimation(self.fig, animatePath, init_func=initPath, frames=1000,
                                            interval=50, blit=False)
         # call the animator.  blit=True means only re-draw the parts that have changed.
-        animBody = animation.FuncAnimation(fig, animateBody, init_func=initBody, frames=1000,
+        animBody = animation.FuncAnimation(self.fig, animateBody, init_func=initBody, frames=1000,
                                            interval=50, blit=False)
-
-        canvas.draw()
+        plt.grid(b=True, color='#666666', linestyle='-')
+        plt.minorticks_on()
+        plt.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.2)
+        self.canvas.draw()
 
     def startStopButton(self):
         self.animate = ~self.animate
@@ -130,8 +127,31 @@ class SimulationPage(tk.Frame):
             self.animate = ~self.animate
         self.controller.show_frame(StartPage)
 
-    def setNBody(self,N):
-        self.n = nBodyProblem(n=N)
+    def setNBody(self, **kwargs):
+        if len(kwargs) != 0:
+            self.canvas.get_tk_widget().destroy()
+        self.fig = plt.figure(1)
+        self.canvas = FigureCanvasTkAgg(self.fig, self)
+        self.fig = plt.figure(1)
+        self.canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+        self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        if len(kwargs) == 0:
+            self.toolbar = NavigationToolbar2Tk(self.canvas, self)
+            self.toolbar.update()
+        self.ax = plt.axes(xlim=[-20, 20], ylim=[-20, 20])
+        self.n = nBodyProblem(n=self.numOfBodies)
+        self.bodylist = []
+        for index, body in enumerate(self.n.system.bodies):
+            self.bodylist.append(self.ax.plot([], [], 'ko' if index == 0 or index == 1 else 'ro')[0])
+
+        self.pathlist = []
+        for index in range(len(self.n.system.bodies)):
+            self.pathlist.append(self.ax.plot([], [], lw=1)[0])
+
+        self.animateCanvas()
+
+    def changeNumOfBodies(self, value):
+        self.numOfBodies = int(value)
 
 ################################################################################
 ################################################################################
