@@ -1,3 +1,5 @@
+#######################################################################################################################
+# Author: Toren Wallengren
 import random
 from massiveBody import massiveBody
 from nBodySystem import nBodySystem
