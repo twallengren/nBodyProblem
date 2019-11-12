@@ -13,6 +13,8 @@ from nBodySystem import nBodySystem
 
 class nBodyProblem:
 
+    initSpeed = 4e-5
+
     def __init__(self, n):
 
         self.system = nBodySystem()
@@ -36,7 +38,7 @@ class nBodyProblem:
             self.system.addBody(massiveBody(
                 mass = random.randint(10,100),
                 coordinate = [random.uniform(-10,10),random.uniform(-10,10)],
-                velocity = [random.uniform(-4e-5,4e-5),random.uniform(-4e-5,4e-5)],
+                velocity = [random.uniform(-self.initSpeed,self.initSpeed),random.uniform(-self.initSpeed,self.initSpeed)],
                 ))
 
     def iterateMotion(self):
