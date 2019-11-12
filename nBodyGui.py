@@ -47,6 +47,9 @@ class StartPage(tk.Frame):
                              command=lambda: controller.show_frame(SimulationPage))
         simulationPageButton.pack()
 
+        detailsLabel = tk.Label(self, text="Units are as follows: \n Mass => Solar Masses \n Distance => Parsecs \n Time => Years \n \n Frames update every 50ms \n Every frame update represents 1000 years of real time", font=LARGE_FONT)
+        detailsLabel.pack(pady=10, padx=10)
+
 class SimulationPage(tk.Frame):
     def __init__(self, parent, controller):
         self.animate = False
