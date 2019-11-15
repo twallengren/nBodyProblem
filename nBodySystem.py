@@ -33,11 +33,11 @@ class nBodySystem:
     def updateAccelerations(self):
 
         for bodyOne in self.bodies:
+            coordOne = bodyOne.getCoordinate()
+            massOne = bodyOne.getMass()
             netForce = [0, 0]
             for bodyTwo in self.bodies:
                 if bodyOne != bodyTwo:
-                    coordOne = bodyOne.getCoordinate()
-                    massOne = bodyOne.getMass()
                     coordTwo = bodyTwo.getCoordinate()
                     massTwo = bodyTwo.getMass()
                     forceDirection = [coordOne[0] - coordTwo[0], coordOne[1] - coordTwo[1]]
@@ -45,5 +45,5 @@ class nBodySystem:
                     forceMagnitude = self.G*massOne*massTwo/directionMagnitude**2
                     force = [forceMagnitude*direction/directionMagnitude for direction in forceDirection]
                     netForce = [netForce[0] + force[0], netForce[1] + force[1]]
-            newAcceleration = [-forceComp/bodyOne.getMass() for forceComp in netForce]
+            newAcceleration = [-forceComp/massOne for forceComp in netForce]
             bodyOne.setAcceleration(newAcceleration)
