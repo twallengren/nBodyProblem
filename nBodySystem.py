@@ -1,20 +1,27 @@
 #######################################################################################################################
 # Author: Toren Wallengren
+#######################################################################################################################
+
 import math
 
 class nBodySystem:
+    """This class represents a system of N massive bodies and contains methods to update positions, velocities, and
+    accelerations of all bodies based on Newtonian Physics."""
 
     def __init__(self):
+        """Initialize instance variables."""
 
-        self.bodies = []
-        self.G = 4.915e-15
-        self.deltaTime = 1000
+        self.bodies = [] # empty list to store massive bodies
+        self.G = 4.915e-15 # Newton's Constant G (units in parsecs, years, and solar masses)
+        self.deltaTime = 1000 # Time step in years (every frame update represents this many years of time)
 
     def addBody(self, massiveBody):
+        """Add new body to system - must be of massiveBody class."""
 
         self.bodies.append(massiveBody)
 
     def updateCoordinates(self):
+        """Update positions based on current velocities using Euler's Method."""
 
         for body in self.bodies:
             coord = body.getCoordinate()
@@ -23,6 +30,7 @@ class nBodySystem:
             body.setCoordinate(newCoordinate)
 
     def updateVelocities(self):
+        """Update velocities based on current accelerations using Euler's Method."""
 
         for body in self.bodies:
             vel = body.getVelocity()
@@ -31,6 +39,7 @@ class nBodySystem:
             body.setVelocity(newVelocity)
 
     def updateAccelerations(self):
+        """Update accelerations using a Newtonian formulation of Gravity."""
 
         for bodyOne in self.bodies:
             coordOne = bodyOne.getCoordinate()

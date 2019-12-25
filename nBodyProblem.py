@@ -1,5 +1,7 @@
 #######################################################################################################################
 # Author: Toren Wallengren
+#######################################################################################################################
+
 import random
 from massiveBody import massiveBody
 from nBodySystem import nBodySystem
@@ -12,10 +14,13 @@ from nBodySystem import nBodySystem
 # frames update every 50ms and each frame represents 1000 years
 
 class nBodyProblem:
+    """This class is the 'canvas' for setting up an N-Body Problem and iterating overall motion."""
 
     initSpeed = 4e-5
 
     def __init__(self, n):
+        """Create instance of nBodySystem class and adds massiveBody instances to nBodySystem. This could be considered
+        the 'Canvas' on which you place massive bodies."""
 
         self.system = nBodySystem()
 
@@ -42,6 +47,7 @@ class nBodyProblem:
                 ))
 
     def iterateMotion(self):
+        """Iterates motion by updating accelerations, velocities, and positions."""
 
         self.system.updateAccelerations()
         self.system.updateVelocities()
