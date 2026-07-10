@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>N-Body Problem</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='6' cy='8' r='3' fill='%23eaf2ff'/%3E%3Ccircle cx='12' cy='5' r='1.5' fill='%236ea8fe'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="controls">
+    <h1>N-Body Problem</h1>
+    <select id="preset" title="Scenario"></select>
+    <div class="control-group">
+      <button id="start-stop" type="button">Start</button>
+      <button id="reset" type="button">Reset</button>
+      <button id="stats-toggle" type="button">Stats</button>
+    </div>
+    <div class="control-group slider-group" id="body-count-group">
+      <label for="body-count">Bodies</label>
+      <input id="body-count" type="range" min="1" max="20" value="1">
+      <span id="body-count-readout" class="readout">1</span>
+    </div>
+    <div class="control-group slider-group">
+      <label for="speed">Speed</label>
+      <input id="speed" type="range" min="-1" max="1" step="0.05" value="0">
+      <span id="speed-readout" class="readout wide">20 kyr/s</span>
+    </div>
+    <label class="control-group check-group" for="follow">
+      <input id="follow" type="checkbox">
+      Follow
+    </label>
+    <span id="sim-clock" class="readout clock">t = 0 kyr</span>
+  </header>
+  <main class="stage">
+    <canvas id="canvas"></canvas>
+    <div id="hud" hidden></div>
+  </main>
+  <footer class="info">
+    Drag on the canvas to launch a 10&ndash;100 M<sub>&#9737;</sub> body &middot; scroll to zoom &middot; shift-drag or right-drag to pan &middot; close bodies merge.
+    Units: solar masses / parsecs / years.
+  </footer>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
